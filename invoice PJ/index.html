@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Lets+Shine&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Invoice – Prem Jewellers</title>
+<style>
+:root{
+  --ink:#2c3e50; --ink-2:#555; --card:#fff;
+  --edge:#d9d9d9; --muted:#f4f6f7; --accent:#34495e; --danger:#e74c3c;
+}
+*{box-sizing:border-box;}
+body{font-family:"Segoe UI",Arial,sans-serif;background:#f9f9f9;margin:0;padding:16px;color:var(--ink);}
+.wrap{max-width:1000px;margin:auto;background:var(--card);border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.08);overflow:hidden;}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;padding:12px 16px;background:var(--muted);border-bottom:1px solid var(--edge);}
+.btn,.select{border:0;border-radius:10px;padding:10px 14px;background:var(--ink);color:#fff;cursor:pointer;font-size:14px;}
+.btn:hover{background:var(--accent);}
+.select{background:var(--accent);}
+.header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 16px 10px;border-bottom:2px solid var(--ink);}
+.logo{width:130px;height:auto;object-fit:contain;}
+.header h1{margin:0 0 4px;font-size:30px;text-align:center;  color: rgb(189, 31, 31);}
+.sub{color:var(--ink-2);margin:2px 0;font-size:14px;text-align:center;}
+.badge{margin-top:8px;font-weight:600;text-align:center;}
+.header-right{font-size:14px;color:var(--ink-2);text-align:right;}
+.meta{display:grid;grid-template-columns:2fr 1.4fr;gap:16px;padding:16px;}
+.card{border:1px solid var(--edge);border-radius:12px;padding:12px;}
+.card h3{margin:0 0 8px;font-size:15px;}
+.row{display:grid;grid-template-columns:110px 1fr;gap:8px;align-items:center;margin:6px 0;}
+.row label{color:var(--ink-2);font-size:13px;}
+input[type="text"], input[type="number"], input[type="date"], select{
+  width:100%;border:1px solid var(--edge);border-radius:8px;
+  padding:8px 10px;font-size:14px;background:#fff;height:34px;line-height:34px;
+}
+input[type="number"]{text-align:right;}
+.table-wrap{padding:0 16px 16px;overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{background:#f2f2f2;border:1px solid var(--edge);padding:6px;font-size:13px;}
+tbody td{border:1px solid var(--edge);padding:4px;vertical-align:middle;text-align:center;}
+.t-center{text-align:center;}
+.t-right{text-align:right;}
+.cell-input{padding:0;}
+.cell-input input{border:0;width:100%;padding:6px;background:transparent;text-align:center;height:33px;}
+.desc input{text-align:left;}
+.add-small{font-size:13px;padding:7px 12px;border-radius:8px;background:var(--ink);color:#fff;border:0;cursor:pointer;}
+/* FIXES */
+/* HSN smaller */
+.hsn-cell select{min-width:100px;width:100%;margin-bottom:2px;height:33px;}
+/* Weight bigger */
+.weight-cell{display:flex;align-items:center;gap:6px;padding:8px}
+.weight-cell input{min-width:100px;text-align:right;height:34px;}
+.weight-cell select{width:50px;height:34px;}
+/* Karat */
+.karat{min-width:70px;height:34px;}
+/* Making */
+.making-cell{display:flex;gap:6px;align-items:center;justify-content:center;padding:8px;}
+.making-cell input{min-width:70px;text-align:right;height:34px;}
+.making-cell select{min-width:50px;height:34px;}
+/* Uniform table cell */
+table td, table th{vertical-align:middle;text-align:center;padding:6px;white-space:nowrap;}
+.delete-cell {text-align: center;width: 40px;}
+.delBtn {background: none;border: none;color: red;font-size: 16px;cursor: pointer;}
+.delBtn:hover {color: darkred;}
+.totals{padding:0 16px 16px;}
+.totals .line{display:flex;justify-content:flex-end;gap:16px;margin:6px 0;}
+.totals .label{min-width:260px;text-align:right;color:#333;}
+.totals .value{min-width:150px;text-align:right;font-weight:600;}
+.terms,.sign{padding:0 16px 16px;}
+.terms{color:#444;border-top:1px dashed var(--edge);padding-top:12px;}
+.sign{display:flex;justify-content:space-between;margin-top:18px;}
+.printText{display:none;}
+@media print{
+  body{background:#fff;}
+  .toolbar, .add-small, select, input{display:none !important;}
+  .wrap{box-shadow:none;border:0;border-radius:0;}
+  .printText{display:inline;}
+  .delete-cell, .delBtn {display: none !important;}
+}
+</style>
+</head>
+<body>
+<div class="wrap" id="invoiceRoot">
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <select id="invoiceType" class="select">
+      <option value="withGST">Invoice With GST</option>
+      <option value="withoutGST">Invoice Without GST</option>
+    </select>
+    <select id="gstRate" class="select">
+      <option value="3">GST 3% (1.5% + 1.5%)</option>
+      <option value="12">GST 12% (6% + 6%)</option>
+    </select>
+    <button class="btn" id="printBtn">🖨 Print</button>
+    <button class="btn" id="pdfBtn">💾 Save PDF</button>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <img src="logo.png" alt="Prem Jewellers Logo" class="logo"/>
+    <div style="flex:1;text-align:center;">
+      <h1>Prem ज्वेलर्स </h1>
+      <div class="sub">Hirapur, Hatia, Dhanbad • Deals in Gold, Silver ornaments, Diamond, Gems & Steel, Brass Bartan</div>
+      <div class="sub">GSTIN: 20ATAPK0131FZQ</div>
+      <div class="badge">Retail Invoice</div>
+    </div>
+    <div class="header-right">Mob: 9304315566</div>
+  </div>
+
+  <!-- Meta -->
+  <div class="meta">
+    <div class="card">
+      <h3>Billed To</h3>
+      <div class="row"><label for="custName">Name</label><input id="custName" type="text"><span class="printText" id="custNameText"></span></div>
+      <div class="row"><label for="custAddr">Address</label><input id="custAddr" type="text"><span class="printText" id="custAddrText"></span></div>
+      <div class="row"><label for="custMobile">Mobile</label><input id="custMobile" type="text"><span class="printText" id="custMobileText"></span></div>
+    </div>
+    <div class="card">
+      <h3>Invoice Details</h3>
+      <div class="row"><label for="invNo">Invoice No.</label><input id="invNo" type="text"><span class="printText" id="invNoText"></span></div>
+      <div class="row"><label for="invDateInput">Date</label><input id="invDateInput" type="date"><span class="printText" id="invDateText"></span></div>
+      <div class="row"><label>State Code</label><input type="text" value="20" readonly><span class="printText">20</span></div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrap">
+    <table id="itemsTable">
+      <thead>
+        <tr>
+          <th>Sl No.</th>
+          <th>Description</th>
+          <th>HSN</th>
+          <th>Weight</th>
+          <th>Rate (₹)</th>
+          <th>Karat</th>
+          <th>Making</th>
+          <th>Amount (₹)</th>
+          <th class="delete-cell"></th>
+        </tr>
+      </thead>
+      <tbody id="itemBody">
+        <tr>
+          <td class="t-center sn"></td>
+          <td class="cell-input desc"><input type="text"><span class="printText descText"></span></td>
+          <td class="hsn-cell">
+            <select class="hsnSelect">
+              <option value="7113" data-name="Gold/Silver Jewellery">7113</option>
+              <option value="7206" data-name="Steel Utensils">7206</option>
+              <option value="7418" data-name="Brass/Copper Utensils">7418</option>
+              <option value="others" data-name="Others">Others</option>
+            </select>
+            <span class="hsnText printText">7113 – Gold/Silver Jewellery</span>
+          </td>
+          <td class="cell-input weight-cell">
+            <input type="number" step="0.01" class="weight" value="0">
+            <select class="weightUnit"><option value="g">g</option><option value="kg">kg</option></select>
+            <span class="printText weightText">0 g</span>
+          </td>
+          <td class="cell-input"><input type="number" step="0.01" class="rate" value="0"><span class="printText rateText">0</span></td>
+          <td class="cell-input">
+            <select class="karat"><option value="NA" selected>NA</option><option value="18K">18K</option><option value="22K">22K</option></select>
+            <span class="karatText printText">NA</span>
+          </td>
+          <td class="making-cell">
+            <input type="number" step="0.01" class="makingInput" value="0">
+            <select class="makingType"><option value="%">%</option><option value="₹">₹</option></select>
+            <span class="makingText printText">0 ₹</span>
+          </td>
+          <td class="t-right amount">0.00</td>
+          <td class="delete-cell"><button class="delBtn">❌</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <button type="button" class="add-small" id="addBtn">➕ Add Item</button>
+
+  <!-- Totals -->
+  <div class="totals">
+    <div class="line"><div class="label">Total Amount Before Tax:</div><div class="value">₹ <span id="subtotal">0.00</span></div></div>
+    <div id="gstBlock">
+      <div class="line"><div class="label">Add: CGST (<span id="cgstPercent">1.5</span>%):</div><div class="value">₹ <span id="cgst">0.00</span></div></div>
+      <div class="line"><div class="label">Add: SGST (<span id="sgstPercent">1.5</span>%):</div><div class="value">₹ <span id="sgst">0.00</span></div></div>
+    </div>
+    <div class="line">
+      <div class="label">Discount:</div>
+      <div class="value">
+        <input type="number" step="0.01" id="discountInput" value="0">
+        <select id="discountType"><option value="₹">₹</option><option value="%">%</option></select>
+        <span class="printText" id="discountPrint">0</span>
+      </div>
+    </div>
+    <div class="line"><div class="label">Round Off (-/+):</div><div class="value">₹ <span id="roundoff">0.00</span></div></div>
+    <div class="line" style="font-size:18px"><div class="label"><strong>Grand Total</strong></div><div class="value"><strong>₹ <span id="grandtotal">0.00</span></strong></div></div>
+    <div class="line"><div class="label">Rupees in words:</div><div class="value" id="inWords">Zero Only</div></div>
+  </div>
+
+  <div class="terms">
+    <strong>Terms & Conditions:</strong>
+    <p>1. Goods once sold will not be taken back 2. Our responsibility ceases after delivery/dispatch 3. Exchange within 15 days only if unused 4. Disputes subject to Dhanbad Jurisdiction 5. Gold: 100% return by weight, Cash Refund 90% 6. Silver: 50% return only by exchange 7. Nose Ring & Pin exchange 60%</p>
+  </div>
+  <div class="sign">
+    <div>Customer Signature ___________________________</div>
+    <div>For Prem Jewellers</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+<script>
+// ------------------- VARIABLES -------------------
+const bodyEl = document.getElementById('itemBody');
+const addBtn = document.getElementById('addBtn');
+const invoiceType = document.getElementById('invoiceType');
+const gstRateEl = document.getElementById('gstRate');
+const invNo = document.getElementById('invNo');
+const invDateInput = document.getElementById('invDateInput');
+const discountInput = document.getElementById('discountInput');
+const discountType = document.getElementById('discountType');
+
+// ------------------- INVOICE NUMBER -------------------
+let invCounter = parseInt(localStorage.getItem("invCounter") || 1);
+function pad(n){return n.toString().padStart(3,'0');}
+function updateInvoiceNo(){
+  const invoiceNo = `PJ-2025-${pad(invCounter)}`;
+  invNo.value = invoiceNo;
+  document.getElementById("invNoText").textContent = invoiceNo;
+  return invoiceNo;
+}
+updateInvoiceNo();
+
+// Today's date
+let today = new Date();
+today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
+invDateInput.value = today.toISOString().split('T')[0];
+
+// ------------------- HELPER FUNCTIONS -------------------
+function renumber(){[...bodyEl.querySelectorAll('.sn')].forEach((el,i)=>el.textContent=i+1);}
+renumber();
+
+function autoErase(el){el.addEventListener('focus', e=>{if(e.target.value=="0") e.target.value="";});}
+[discountInput].forEach(autoErase);
+bodyEl.addEventListener('focus', e=>{
+  if(e.target.matches('.weight,.rate,.makingInput')){ if(e.target.value=='0') e.target.value=''; }
+}, true);
+
+function format2(n){return Number(n).toFixed(2);}
+function numberToWords(num){
+  num=Math.round(Number(num)||0);
+  if(num===0) return "Zero";
+  const a=["","One","Two","Three","Four","Five","Six","Seven","Eight","Nine","Ten","Eleven","Twelve","Thirteen","Fourteen","Fifteen","Sixteen","Seventeen","Eighteen","Nineteen"];
+  const b=["","","Twenty","Thirty","Forty","Fifty","Sixty","Seventy","Eighty","Ninety"];
+  const inWords=n=>{
+    if(n<20) return a[n];
+    if(n<100) return b[Math.floor(n/10)] + (n%10? " "+a[n%10]:"");
+    if(n<1000) return a[Math.floor(n/100)]+" Hundred"+(n%100?" "+inWords(n%100):"");
+    if(n<100000) return inWords(Math.floor(n/1000))+" Thousand"+(n%1000?" "+inWords(n%1000):"");
+    if(n<10000000) return inWords(Math.floor(n/100000))+" Lakh"+(n%100000?" "+inWords(n%100000):"");
+    return inWords(Math.floor(n/10000000))+" Crore"+(n%10000000?" "+inWords(n%10000000):"");
+  };
+  return inWords(num);
+}
+
+// ------------------- CALCULATE -------------------
+function calculate(){
+  let subtotal=0;
+  bodyEl.querySelectorAll('tr').forEach(row=>{
+    const w=parseFloat(row.querySelector('.weight').value)||0;
+    const r=parseFloat(row.querySelector('.rate').value)||0;
+    const m=parseFloat(row.querySelector('.makingInput').value)||0;
+    const type=row.querySelector('.makingType').value;
+    let amt=w*r;
+    if(type=="%") amt += amt*(m/100); else amt += m;
+    row.querySelector('.amount').textContent=format2(amt);
+    subtotal+=amt;
+
+    row.querySelector('.descText').textContent=row.querySelector('.desc input').value;
+    row.querySelector('.weightText').textContent=format2(w)+' '+row.querySelector('.weightUnit').value;
+    row.querySelector('.rateText').textContent=format2(r);
+    row.querySelector('.makingText').textContent=m+" "+type;
+    row.querySelector('.karatText').textContent=row.querySelector('.karat').value;
+    row.querySelector('.hsnText').textContent=row.querySelector('.hsnSelect').value+" – "+row.querySelector('.hsnSelect option:checked').dataset.name;
+  });
+
+  const withGST = invoiceType.value==="withGST";
+  document.getElementById('gstBlock').style.display = withGST?"block":"none";
+
+  const gstRate = parseFloat(gstRateEl.value) || 3;
+  const cgstRate = gstRate/2;
+  const sgstRate = gstRate/2;
+  document.getElementById('cgstPercent').textContent = cgstRate;
+  document.getElementById('sgstPercent').textContent = sgstRate;
+
+  let cgst=withGST?subtotal*(cgstRate/100):0;
+  let sgst=withGST?subtotal*(sgstRate/100):0;
+
+  let total=subtotal+cgst+sgst;
+  let disc=parseFloat(discountInput.value)||0;
+  let discTypeVal=discountType.value;
+  let discountAmount=discTypeVal=="%"?total*(disc/100):disc;
+  let grandTotal=total-discountAmount;
+  document.getElementById('discountPrint').textContent=discTypeVal=="%"?disc+"%":"₹ "+disc;
+
+  let rounded=Math.round(grandTotal);
+
+  document.getElementById('subtotal').textContent=format2(subtotal);
+  document.getElementById('cgst').textContent=format2(cgst);
+  document.getElementById('sgst').textContent=format2(sgst);
+  document.getElementById('grandtotal').textContent=format2(rounded);
+  document.getElementById('roundoff').textContent=format2(rounded-grandTotal);
+  document.getElementById('inWords').textContent=numberToWords(rounded)+" Only";
+
+  document.getElementById('custNameText').textContent=document.getElementById('custName').value;
+  document.getElementById('custAddrText').textContent=document.getElementById('custAddr').value;
+  document.getElementById('custMobileText').textContent=document.getElementById('custMobile').value;
+  document.getElementById('invNoText').textContent=invNo.value;
+  document.getElementById('invDateText').textContent=invDateInput.value;
+}
+
+// ------------------- EVENT LISTENERS -------------------
+bodyEl.addEventListener('input',calculate);
+[discountInput, discountType, invoiceType, gstRateEl, invNo, invDateInput,
+ document.getElementById('custName'),
+ document.getElementById('custAddr'),
+ document.getElementById('custMobile')
+].forEach(el=>el.addEventListener('input',calculate));
+calculate();
+
+// ------------------- ADD/DELETE ROW -------------------
+addBtn.addEventListener('click',()=>{
+  const newRow=bodyEl.rows[0].cloneNode(true);
+  newRow.querySelectorAll('input').forEach(el=>el.value=el.type=="number"?"0":"");
+  newRow.querySelectorAll('select').forEach(el=>el.selectedIndex=0);
+  newRow.querySelector('.amount').textContent="0.00";
+  bodyEl.appendChild(newRow); renumber(); calculate();
+});
+
+bodyEl.addEventListener('click',(e)=>{
+  if(e.target.classList.contains('delBtn')){
+    if(bodyEl.rows.length > 1){ e.target.closest('tr').remove(); renumber(); calculate(); }
+  }
+});
+
+// ------------------- FINALIZE INVOICE -------------------
+function finalizeInvoice(){
+  const invoiceNo = updateInvoiceNo();
+  localStorage.setItem("invCounter", ++invCounter);
+  return invoiceNo;
+}
+
+// ------------------- PRINT / PDF -------------------
+document.getElementById('pdfBtn').addEventListener('click',()=>{
+  calculate(); // recalc totals
+  finalizeInvoice();
+
+  // Clone invoice
+  const invoice = document.getElementById('invoiceRoot');
+  const clone = invoice.cloneNode(true);
+  clone.style.width = "210mm"; // A4 width
+  clone.style.padding = "0"; 
+  clone.style.boxSizing = "border-box";
+
+  // Remove toolbar, buttons
+  clone.querySelectorAll('.toolbar, .add-small, .delBtn, .delete-cell').forEach(el=>el.remove());
+
+  // Replace inputs/selects with spans
+  clone.querySelectorAll('input').forEach(input=>{
+    const span = document.createElement('span');
+    span.textContent = input.value;
+    const style = window.getComputedStyle(input);
+    span.style.display = "inline-block";
+    span.style.width = style.width;
+    span.style.height = style.height;
+    span.style.padding = style.padding;
+    span.style.font = style.font;
+    span.style.textAlign = style.textAlign;
+    input.replaceWith(span);
+  });
+
+  clone.querySelectorAll('select').forEach(select=>{
+    const span = document.createElement('span');
+    span.textContent = select.options[select.selectedIndex].text;
+    const style = window.getComputedStyle(select);
+    span.style.display = "inline-block";
+    span.style.width = style.width;
+    span.style.height = style.height;
+    span.style.padding = style.padding;
+    span.style.font = style.font;
+    span.style.textAlign = style.textAlign;
+    select.replaceWith(span);
+  });
+
+  // Apply table cell styles
+  clone.querySelectorAll('table, table th, table td').forEach(el=>{
+    const style = window.getComputedStyle(el);
+    el.style.width = style.width;
+    el.style.height = style.height;
+    el.style.padding = style.padding;
+    el.style.font = style.font;
+    el.style.textAlign = style.textAlign;
+    el.style.border = style.border;
+  });
+
+  // Generate PDF
+  const opt = {
+    margin:0,
+    filename: invNo.value+".pdf",
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2, useCORS:true},
+    jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
+  };
+  html2pdf().set(opt).from(clone).save();
+});
+// ------------------- PRINT BUTTON -------------------
+document.getElementById('printBtn').addEventListener('click', async ()=>{
+    calculate(); // recalc all totals before print
+
+    const element = document.getElementById('invoiceRoot');
+    const invoiceNumber = document.getElementById('invNo').value || 'invoice';
+
+    // First: generate PDF
+    await html2pdf()
+        .set({
+            margin: 0.2,
+            filename: invoiceNumber + '.pdf',
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4' }
+        })
+        .from(element)
+        .save();
+
+    // Then: open print dialog
+    window.print();
+});
+
+
+</script>
+</body>
+</html>
