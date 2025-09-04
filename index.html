@@ -43,20 +43,14 @@ tbody td{border:1px solid var(--edge);padding:4px;vertical-align:middle;text-ali
 .cell-input input{border:0;width:100%;padding:6px;background:transparent;text-align:center;height:33px;}
 .desc input{text-align:left;}
 .add-small{font-size:13px;padding:7px 12px;border-radius:8px;background:var(--ink);color:#fff;border:0;cursor:pointer;}
-/* FIXES */
-/* HSN smaller */
 .hsn-cell select{min-width:100px;width:100%;margin-bottom:2px;height:33px;}
-/* Weight bigger */
 .weight-cell{display:flex;align-items:center;gap:6px;padding:8px}
 .weight-cell input{min-width:100px;text-align:right;height:34px;}
 .weight-cell select{width:50px;height:34px;}
-/* Karat */
 .karat{min-width:70px;height:34px;}
-/* Making */
 .making-cell{display:flex;gap:6px;align-items:center;justify-content:center;padding:8px;}
 .making-cell input{min-width:70px;text-align:right;height:34px;}
 .making-cell select{min-width:50px;height:34px;}
-/* Uniform table cell */
 table td, table th{vertical-align:middle;text-align:center;padding:6px;white-space:nowrap;}
 .delete-cell {text-align: center;width: 40px;}
 .delBtn {background: none;border: none;color: red;font-size: 16px;cursor: pointer;}
@@ -76,12 +70,18 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
   .printText{display:inline;}
   .delete-cell, .delBtn {display: none !important;}
 }
+.pdf-mode .toolbar,
+.pdf-mode .add-small,
+.pdf-mode select,
+.pdf-mode input,
+.pdf-mode .delete-cell,
+.pdf-mode .delBtn { display: none !important; }
+.pdf-mode .printText { display: inline !important; }
+.pdf-mode .wrap { box-shadow: none; border: 0; border-radius: 0; }
 </style>
 </head>
 <body>
 <div class="wrap" id="invoiceRoot">
-
-  <!-- Toolbar -->
   <div class="toolbar">
     <select id="invoiceType" class="select">
       <option value="withGST">Invoice With GST</option>
@@ -94,8 +94,6 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
     <button class="btn" id="printBtn">🖨 Print</button>
     <button class="btn" id="pdfBtn">💾 Save PDF</button>
   </div>
-
-  <!-- Header -->
   <div class="header">
     <img src="logo.png" alt="Prem Jewellers Logo" class="logo"/>
     <div style="flex:1;text-align:center;">
@@ -106,24 +104,20 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
     </div>
     <div class="header-right">Mob: 9304315566</div>
   </div>
-
-  <!-- Meta -->
   <div class="meta">
     <div class="card">
       <h3>Billed To</h3>
-      <div class="row"><label for="custName">Name</label><input id="custName" type="text"><span class="printText" id="custNameText"></span></div>
-      <div class="row"><label for="custAddr">Address</label><input id="custAddr" type="text"><span class="printText" id="custAddrText"></span></div>
-      <div class="row"><label for="custMobile">Mobile</label><input id="custMobile" type="text"><span class="printText" id="custMobileText"></span></div>
+      <div class="row"><label for="custName">Name</label><input id="custName" type="text" placeholder="Name"><span class="printText" id="custNameText"></span></div>
+      <div class="row"><label for="custAddr">Address</label><input id="custAddr" type="text" placeholder="Addr"><span class="printText" id="custAddrText"></span></div>
+      <div class="row"><label for="custMobile">Mobile</label><input id="custMobile" type="text" placeholder="Mobile"><span class="printText" id="custMobileText"></span></div>
     </div>
     <div class="card">
       <h3>Invoice Details</h3>
-      <div class="row"><label for="invNo">Invoice No.</label><input id="invNo" type="text"><span class="printText" id="invNoText"></span></div>
+      <div class="row"><label for="invNo">Invoice No.</label><input id="invNo" type="text" placeholder="Inv No"><span class="printText" id="invNoText"></span></div>
       <div class="row"><label for="invDateInput">Date</label><input id="invDateInput" type="date"><span class="printText" id="invDateText"></span></div>
       <div class="row"><label>State Code</label><input type="text" value="20" readonly><span class="printText">20</span></div>
     </div>
   </div>
-
-  <!-- Table -->
   <div class="table-wrap">
     <table id="itemsTable">
       <thead>
@@ -142,7 +136,7 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
       <tbody id="itemBody">
         <tr>
           <td class="t-center sn"></td>
-          <td class="cell-input desc"><input type="text"><span class="printText descText"></span></td>
+          <td class="cell-input desc"><input type="text" placeholder="Desc"><span class="printText descText"></span></td>
           <td class="hsn-cell">
             <select class="hsnSelect">
               <option value="7113" data-name="Gold/Silver Jewellery">7113</option>
@@ -153,17 +147,17 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
             <span class="hsnText printText">7113 – Gold/Silver Jewellery</span>
           </td>
           <td class="cell-input weight-cell">
-            <input type="number" step="0.01" class="weight" value="0">
+            <input type="number" step="0.01" class="weight"  placeholder="0">
             <select class="weightUnit"><option value="g">g</option><option value="kg">kg</option></select>
             <span class="printText weightText">0 g</span>
           </td>
-          <td class="cell-input"><input type="number" step="0.01" class="rate" value="0"><span class="printText rateText">0</span></td>
+          <td class="cell-input"><input type="number" step="0.01" class="rate" placeholder="0"><span class="printText rateText">0</span></td>
           <td class="cell-input">
             <select class="karat"><option value="NA" selected>NA</option><option value="18K">18K</option><option value="22K">22K</option></select>
             <span class="karatText printText">NA</span>
           </td>
           <td class="making-cell">
-            <input type="number" step="0.01" class="makingInput" value="0">
+            <input type="number" step="0.01" class="makingInput" placeholder="0">
             <select class="makingType"><option value="%">%</option><option value="₹">₹</option></select>
             <span class="makingText printText">0 ₹</span>
           </td>
@@ -174,8 +168,6 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
     </table>
   </div>
   <button type="button" class="add-small" id="addBtn">➕ Add Item</button>
-
-  <!-- Totals -->
   <div class="totals">
     <div class="line"><div class="label">Total Amount Before Tax:</div><div class="value">₹ <span id="subtotal">0.00</span></div></div>
     <div id="gstBlock">
@@ -185,7 +177,7 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
     <div class="line">
       <div class="label">Discount:</div>
       <div class="value">
-        <input type="number" step="0.01" id="discountInput" value="0">
+        <input type="number" step="0.01" id="discountInput" value="0" placeholder="0">
         <select id="discountType"><option value="₹">₹</option><option value="%">%</option></select>
         <span class="printText" id="discountPrint">0</span>
       </div>
@@ -194,7 +186,6 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
     <div class="line" style="font-size:18px"><div class="label"><strong>Grand Total</strong></div><div class="value"><strong>₹ <span id="grandtotal">0.00</span></strong></div></div>
     <div class="line"><div class="label">Rupees in words:</div><div class="value" id="inWords">Zero Only</div></div>
   </div>
-
   <div class="terms">
     <strong>Terms & Conditions:</strong>
     <p>1. Goods once sold will not be taken back 2. Our responsibility ceases after delivery/dispatch 3. Exchange within 15 days only if unused 4. Disputes subject to Dhanbad Jurisdiction 5. Gold: 100% return by weight, Cash Refund 90% 6. Silver: 50% return only by exchange 7. Nose Ring & Pin exchange 60%</p>
@@ -204,7 +195,6 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
     <div>For Prem Jewellers</div>
   </div>
 </div>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 <script>
 // ------------------- VARIABLES -------------------
@@ -215,18 +205,6 @@ const gstRateEl = document.getElementById('gstRate');
 const invNo = document.getElementById('invNo');
 const invDateInput = document.getElementById('invDateInput');
 const discountInput = document.getElementById('discountInput');
-const discountType = document.getElementById('discountType');
-
-// ------------------- INVOICE NUMBER -------------------
-let invCounter = parseInt(localStorage.getItem("invCounter") || 1);
-function pad(n){return n.toString().padStart(3,'0');}
-function updateInvoiceNo(){
-  const invoiceNo = `PJ-2025-${pad(invCounter)}`;
-  invNo.value = invoiceNo;
-  document.getElementById("invNoText").textContent = invoiceNo;
-  return invoiceNo;
-}
-updateInvoiceNo();
 
 // Today's date
 let today = new Date();
@@ -236,13 +214,6 @@ invDateInput.value = today.toISOString().split('T')[0];
 // ------------------- HELPER FUNCTIONS -------------------
 function renumber(){[...bodyEl.querySelectorAll('.sn')].forEach((el,i)=>el.textContent=i+1);}
 renumber();
-
-function autoErase(el){el.addEventListener('focus', e=>{if(e.target.value=="0") e.target.value="";});}
-[discountInput].forEach(autoErase);
-bodyEl.addEventListener('focus', e=>{
-  if(e.target.matches('.weight,.rate,.makingInput')){ if(e.target.value=='0') e.target.value=''; }
-}, true);
-
 function format2(n){return Number(n).toFixed(2);}
 function numberToWords(num){
   num=Math.round(Number(num)||0);
@@ -262,6 +233,14 @@ function numberToWords(num){
 
 // ------------------- CALCULATE -------------------
 function calculate(){
+  // Sync inputs to printText spans
+  document.querySelectorAll("input, select").forEach(el => {
+    let span = el.parentElement.querySelector(".printText");
+    if(span){
+      if(el.tagName==="SELECT") span.textContent = el.options[el.selectedIndex]?.text || "";
+      else span.textContent = el.value;
+    }
+  });
   let subtotal=0;
   bodyEl.querySelectorAll('tr').forEach(row=>{
     const w=parseFloat(row.querySelector('.weight').value)||0;
@@ -272,7 +251,6 @@ function calculate(){
     if(type=="%") amt += amt*(m/100); else amt += m;
     row.querySelector('.amount').textContent=format2(amt);
     subtotal+=amt;
-
     row.querySelector('.descText').textContent=row.querySelector('.desc input').value;
     row.querySelector('.weightText').textContent=format2(w)+' '+row.querySelector('.weightUnit').value;
     row.querySelector('.rateText').textContent=format2(r);
@@ -280,49 +258,37 @@ function calculate(){
     row.querySelector('.karatText').textContent=row.querySelector('.karat').value;
     row.querySelector('.hsnText').textContent=row.querySelector('.hsnSelect').value+" – "+row.querySelector('.hsnSelect option:checked').dataset.name;
   });
-
   const withGST = invoiceType.value==="withGST";
   document.getElementById('gstBlock').style.display = withGST?"block":"none";
-
   const gstRate = parseFloat(gstRateEl.value) || 3;
   const cgstRate = gstRate/2;
   const sgstRate = gstRate/2;
   document.getElementById('cgstPercent').textContent = cgstRate;
   document.getElementById('sgstPercent').textContent = sgstRate;
-
   let cgst=withGST?subtotal*(cgstRate/100):0;
   let sgst=withGST?subtotal*(sgstRate/100):0;
-
   let total=subtotal+cgst+sgst;
   let disc=parseFloat(discountInput.value)||0;
-  let discTypeVal=discountType.value;
+  let discTypeVal=document.getElementById('discountType').value;
   let discountAmount=discTypeVal=="%"?total*(disc/100):disc;
   let grandTotal=total-discountAmount;
   document.getElementById('discountPrint').textContent=discTypeVal=="%"?disc+"%":"₹ "+disc;
-
   let rounded=Math.round(grandTotal);
-
   document.getElementById('subtotal').textContent=format2(subtotal);
   document.getElementById('cgst').textContent=format2(cgst);
   document.getElementById('sgst').textContent=format2(sgst);
   document.getElementById('grandtotal').textContent=format2(rounded);
   document.getElementById('roundoff').textContent=format2(rounded-grandTotal);
   document.getElementById('inWords').textContent=numberToWords(rounded)+" Only";
-
   document.getElementById('custNameText').textContent=document.getElementById('custName').value;
   document.getElementById('custAddrText').textContent=document.getElementById('custAddr').value;
   document.getElementById('custMobileText').textContent=document.getElementById('custMobile').value;
   document.getElementById('invNoText').textContent=invNo.value;
   document.getElementById('invDateText').textContent=invDateInput.value;
 }
-
-// ------------------- EVENT LISTENERS -------------------
 bodyEl.addEventListener('input',calculate);
-[discountInput, discountType, invoiceType, gstRateEl, invNo, invDateInput,
- document.getElementById('custName'),
- document.getElementById('custAddr'),
- document.getElementById('custMobile')
-].forEach(el=>el.addEventListener('input',calculate));
+[discountInput, document.getElementById('discountType'), invoiceType, gstRateEl, invNo, invDateInput,
+document.getElementById('custName'), document.getElementById('custAddr'), document.getElementById('custMobile')].forEach(el=>el.addEventListener('input',calculate));
 calculate();
 
 // ------------------- ADD/DELETE ROW -------------------
@@ -333,106 +299,37 @@ addBtn.addEventListener('click',()=>{
   newRow.querySelector('.amount').textContent="0.00";
   bodyEl.appendChild(newRow); renumber(); calculate();
 });
-
 bodyEl.addEventListener('click',(e)=>{
   if(e.target.classList.contains('delBtn')){
-    if(bodyEl.rows.length > 1){ e.target.closest('tr').remove(); renumber(); calculate(); }
+    if(bodyEl.rows.length>1){ e.target.closest('tr').remove(); renumber(); calculate(); }
   }
 });
 
-// ------------------- FINALIZE INVOICE -------------------
-function finalizeInvoice(){
-  const invoiceNo = updateInvoiceNo();
-  localStorage.setItem("invCounter", ++invCounter);
-  return invoiceNo;
-}
-
 // ------------------- PRINT / PDF -------------------
 document.getElementById('pdfBtn').addEventListener('click',()=>{
-  calculate(); // recalc totals
-  finalizeInvoice();
-
-  // Clone invoice
-  const invoice = document.getElementById('invoiceRoot');
-  const clone = invoice.cloneNode(true);
-  clone.style.width = "210mm"; // A4 width
-  clone.style.padding = "0"; 
-  clone.style.boxSizing = "border-box";
-
-  // Remove toolbar, buttons
-  clone.querySelectorAll('.toolbar, .add-small, .delBtn, .delete-cell').forEach(el=>el.remove());
-
-  // Replace inputs/selects with spans
-  clone.querySelectorAll('input').forEach(input=>{
-    const span = document.createElement('span');
-    span.textContent = input.value;
-    const style = window.getComputedStyle(input);
-    span.style.display = "inline-block";
-    span.style.width = style.width;
-    span.style.height = style.height;
-    span.style.padding = style.padding;
-    span.style.font = style.font;
-    span.style.textAlign = style.textAlign;
-    input.replaceWith(span);
-  });
-
-  clone.querySelectorAll('select').forEach(select=>{
-    const span = document.createElement('span');
-    span.textContent = select.options[select.selectedIndex].text;
-    const style = window.getComputedStyle(select);
-    span.style.display = "inline-block";
-    span.style.width = style.width;
-    span.style.height = style.height;
-    span.style.padding = style.padding;
-    span.style.font = style.font;
-    span.style.textAlign = style.textAlign;
-    select.replaceWith(span);
-  });
-
-  // Apply table cell styles
-  clone.querySelectorAll('table, table th, table td').forEach(el=>{
-    const style = window.getComputedStyle(el);
-    el.style.width = style.width;
-    el.style.height = style.height;
-    el.style.padding = style.padding;
-    el.style.font = style.font;
-    el.style.textAlign = style.textAlign;
-    el.style.border = style.border;
-  });
-
-  // Generate PDF
-  const opt = {
+  calculate();
+  const invoice=document.getElementById('invoiceRoot');
+  invoice.classList.add("pdf-mode");
+  const firstName=document.getElementById('custName').value.split(' ')[0] || 'Customer';
+  const opt={
     margin:0,
-    filename: invNo.value+".pdf",
+    filename:`PJ-${firstName}-${invNo.value}.pdf`,
     image:{type:'jpeg',quality:0.98},
-    html2canvas:{scale:2, useCORS:true},
-    jsPDF:{unit:'mm', format:'a4', orientation:'portrait'}
+    html2canvas:{scale:2,useCORS:true},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
   };
-  html2pdf().set(opt).from(clone).save();
-});
-// ------------------- PRINT BUTTON -------------------
-document.getElementById('printBtn').addEventListener('click', async ()=>{
-    calculate(); // recalc all totals before print
-
-    const element = document.getElementById('invoiceRoot');
-    const invoiceNumber = document.getElementById('invNo').value || 'invoice';
-
-    // First: generate PDF
-    await html2pdf()
-        .set({
-            margin: 0.2,
-            filename: invoiceNumber + '.pdf',
-            html2canvas: { scale: 2 },
-            jsPDF: { unit: 'in', format: 'a4' }
-        })
-        .from(element)
-        .save();
-
-    // Then: open print dialog
-    window.print();
+  html2pdf().set(opt).from(invoice).save().then(()=>{ invoice.classList.remove("pdf-mode"); });
 });
 
-
+document.getElementById('printBtn').addEventListener('click',()=>{
+  calculate();
+  const invoice=document.getElementById('invoiceRoot');
+  window.print();
+  invoice.classList.add("pdf-mode");
+  const firstName=document.getElementById('custName').value.split(' ')[0] || 'Customer';
+  const opt={ margin:0, filename:`PJ-${firstName}-${invNo.value}.pdf`, image:{type:'jpeg',quality:0.98}, html2canvas:{scale:2,useCORS:true}, jsPDF:{unit:'mm',format:'a4',orientation:'portrait'} };
+  html2pdf().set(opt).from(invoice).save().then(()=>{ invoice.classList.remove("pdf-mode"); });
+});
 </script>
 </body>
 </html>
