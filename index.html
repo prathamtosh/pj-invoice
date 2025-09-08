@@ -206,6 +206,20 @@ const invNo = document.getElementById('invNo');
 const invDateInput = document.getElementById('invDateInput');
 const discountInput = document.getElementById('discountInput');
 
+const gstinEl = document.querySelector('.header .sub:nth-child(3)'); // GSTIN element
+
+invoiceType.addEventListener('change', () => {
+  if(invoiceType.value === 'withoutGST'){
+    gstinEl.style.display = 'none';
+  } else {
+    gstinEl.style.display = 'block';
+  }
+});
+
+// Initialize on page load
+if(invoiceType.value === 'withoutGST') gstinEl.style.display = 'none';
+
+
 // Today's date
 let today = new Date();
 today.setMinutes(today.getMinutes() - today.getTimezoneOffset());
@@ -333,6 +347,7 @@ document.getElementById('printBtn').addEventListener('click',()=>{
 </script>
 </body>
 </html>
+
 
 
 
