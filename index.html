@@ -206,6 +206,7 @@ const invNo = document.getElementById('invNo');
 const invDateInput = document.getElementById('invDateInput');
 const discountInput = document.getElementById('discountInput');
 
+
 const gstinEl = document.querySelector('.header .sub:nth-child(3)'); // GSTIN element
 
 invoiceType.addEventListener('change', () => {
@@ -344,10 +345,51 @@ document.getElementById('printBtn').addEventListener('click',()=>{
   const opt={ margin:0, filename:`PJ-${firstName}-${invNo.value}.pdf`, image:{type:'jpeg',quality:0.98}, html2canvas:{scale:2,useCORS:true}, jsPDF:{unit:'mm',format:'a4',orientation:'portrait'} };
   html2pdf().set(opt).from(invoice).save().then(()=>{ invoice.classList.remove("pdf-mode"); });
 });
+
+
+// ------------------- AUTO INVOICE GENERATOR -------------------
+(function(){
+  const invNoInput = document.getElementById("invNo");
+  const STORAGE_KEY = "lastInvoiceNo";
+
+  // Function to format number as 3 digits (001, 002, 010 etc.)
+  function formatInvoiceNo(num){
+    return String(num).padStart(3, "0");
+  }
+
+  // Load last invoice no. from localStorage
+  let lastNo = parseInt(localStorage.getItem(STORAGE_KEY) || "0");
+
+  // Auto set next invoice no. on load (only if empty)
+  if(!invNoInput.value){
+    invNoInput.value = formatInvoiceNo(lastNo + 1);
+  }
+
+  // When user changes invoice no. manually
+  invNoInput.addEventListener("input", () => {
+    let current = parseInt(invNoInput.value) || 0;
+    if(current > lastNo){
+      // Update stored number if it's higher than last
+      lastNo = current;
+      localStorage.setItem(STORAGE_KEY, lastNo);
+    }
+  });
+
+  // On page unload, save the current invoice no.
+  window.addEventListener("beforeunload", () => {
+    let current = parseInt(invNoInput.value) || lastNo;
+    if(current > lastNo){
+      localStorage.setItem(STORAGE_KEY, current);
+    } else {
+      localStorage.setItem(STORAGE_KEY, lastNo);
+    }
+  });
+})();
+
+
 </script>
 </body>
 </html>
-
 
 
 
