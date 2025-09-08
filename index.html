@@ -69,10 +69,11 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
   .wrap{box-shadow:none;border:0;border-radius:0;}
   .printText{display:inline;}
   .delete-cell, .delBtn {display: none !important;}
-body.bwPrint {
+body.bwPrint * {
     -webkit-print-color-adjust: exact !important;
     color-adjust: exact !important;
-    filter: grayscale(100%);
+    color: #000 !important;          /* text in black */
+    background: #fff !important;     /* force white backgrounds */
   }
 }
 .pdf-mode .toolbar,
