@@ -63,17 +63,47 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
 .terms{color:#444;border-top:1px dashed var(--edge);padding-top:12px;}
 .sign{display:flex;justify-content:space-between;margin-top:18px;}
 .printText{display:none;}
-@media print{
-  body{background:#fff;}
-  .toolbar, .add-small, select, input{display:none !important;}
-  .wrap{box-shadow:none;border:0;border-radius:0;}
-  .printText{display:inline;}
-  .delete-cell, .delBtn {display: none !important;}
-body.bwPrint * {
+@media print {
+  body { 
+    background:#fff;
+    margin: 0;
+    padding: 0;
+  }
+
+  .toolbar, .add-small, select, input {
+    display:none !important;
+  }
+  .wrap {
+    box-shadow:none;
+    border:0;
+    border-radius:0;
+  }
+  .printText {
+    display:inline;
+  }
+  .delete-cell, .delBtn {
+    display: none !important;
+  }
+
+  /* 🔹 Black & White option */
+  body.bwPrint * {
     -webkit-print-color-adjust: exact !important;
     color-adjust: exact !important;
-    color: #000 !important;          /* text in black */
-    background: #fff !important;     /* force white backgrounds */
+    color: #000 !important;
+    background: #fff !important;
+  }
+
+  /* 🔹 Prevent extra blank page */
+  html, body, #invoiceRoot {
+    height: auto !important;
+    max-height: 100% !important;
+    overflow: visible !important;
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+  }
+
+  #invoiceRoot * {
+    page-break-inside: avoid;
   }
 }
 .pdf-mode .toolbar,
