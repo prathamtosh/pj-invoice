@@ -62,14 +62,14 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
 /*.terms,.sign{padding:0 16px 16px;}
 .terms{color:#444;border-top:1px dashed var(--edge);padding-top:12px;}*/
 .terms {
-  font-size: 12px;   /* makes text smaller */
-  line-height: 1.4;  /* improves readability */
+  font-size: 10px;   /* makes text smaller */
+  line-height: 1;  /* improves readability */
   color: #333;       /* optional: softer text */
   margin-top: 10px;  /* space above it */
 }
 
 .terms strong {
-  font-size: 13px;   /* smaller heading */
+  font-size: 12px;   /* smaller heading */
   display: block;    /* puts it on its own line */
   margin-bottom: 4px;
 }
@@ -156,9 +156,11 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
           <td class="cell-input desc"><input type="text" placeholder="Desc"><span class="printText descText"></span></td>
           <td class="hsn-cell">
             <select class="hsnSelect">
-              <option value="7113" data-name="Gold/Silver Jewellery">7113</option>
-              <option value="7206" data-name="Steel Utensils">7206</option>
-              <option value="7418" data-name="Brass/Copper Utensils">7418</option>
+               <option value="7113" data-name="Gold">7113 Gold</option>
+              <option value="7113" data-name="Silver">7113 Silver</option>
+              <option value="7206" data-name="Steel ">7206 Steel</option>
+              <option value="7418" data-name="Brass">7418 Brass</option>
+              <option value="7418" data-name="Copper">7418 Copper</option>
               <option value="others" data-name="Others">Others</option>
             </select>
             <span class="hsnText printText">7113 – Gold/Silver Jewellery</span>
@@ -407,6 +409,7 @@ document.getElementById('printBtn').addEventListener('click',()=>{
 </script>
 </body>
 </html>
+
 
 
 
