@@ -65,43 +65,43 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
 .printText{display:none;}
 @media print {
   body { 
-    background:#fff;
+    background: #fff;
     margin: 0;
     padding: 0;
   }
 
   .toolbar, .add-small, select, input {
-    display:none !important;
+    display: none !important;
   }
   .wrap {
-    box-shadow:none;
-    border:0;
-    border-radius:0;
+    box-shadow: none;
+    border: 0;
+    border-radius: 0;
   }
   .printText {
-    display:inline;
+    display: inline;
   }
   .delete-cell, .delBtn {
     display: none !important;
   }
 
-  /* 🔹 Black & White option */
-  body.bwPrint * {
+  /* 🔹 Black & White mode (only when bwPrint class is on body) */
+  body.bwPrint {
     -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
-    color: #000 !important;
-    background: #fff !important;
+    print-color-adjust: exact !important;
+    filter: grayscale(100%) !important;
   }
 
   /* 🔹 Prevent extra blank page */
-  html, body, #invoiceRoot {
+  html, body {
     height: auto !important;
     max-height: 100% !important;
     overflow: visible !important;
+  }
+  #invoiceRoot {
     page-break-after: avoid !important;
     page-break-before: avoid !important;
   }
-
   #invoiceRoot * {
     page-break-inside: avoid;
   }
