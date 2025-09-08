@@ -63,48 +63,12 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
 .terms{color:#444;border-top:1px dashed var(--edge);padding-top:12px;}
 .sign{display:flex;justify-content:space-between;margin-top:18px;}
 .printText{display:none;}
-@media print {
-  body { 
-    background: #fff;
-    margin: 0;
-    padding: 0;
-  }
-
-  .toolbar, .add-small, select, input {
-    display: none !important;
-  }
-  .wrap {
-    box-shadow: none;
-    border: 0;
-    border-radius: 0;
-  }
-  .printText {
-    display: inline;
-  }
-  .delete-cell, .delBtn {
-    display: none !important;
-  }
-
-  /* 🔹 Black & White mode (only when bwPrint class is on body) */
-  body.bwPrint {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    filter: grayscale(100%) !important;
-  }
-
-  /* 🔹 Prevent extra blank page */
-  html, body {
-    height: auto !important;
-    max-height: 100% !important;
-    overflow: visible !important;
-  }
-  #invoiceRoot {
-    page-break-after: avoid !important;
-    page-break-before: avoid !important;
-  }
-  #invoiceRoot * {
-    page-break-inside: avoid;
-  }
+@media print{
+  body{background:#fff;}
+  .toolbar, .add-small, select, input{display:none !important;}
+  .wrap{box-shadow:none;border:0;border-radius:0;}
+  .printText{display:inline;}
+  .delete-cell, .delBtn {display: none !important;}
 }
 .pdf-mode .toolbar,
 .pdf-mode .add-small,
@@ -127,9 +91,6 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
       <option value="3">GST 3% (1.5% + 1.5%)</option>
       <option value="12">GST 12% (6% + 6%)</option>
     </select>
-<label style="display:flex;align-items:center;gap:6px;font-size:14px;color:#333;">
-  <input type="checkbox" id="colorPrint"> Print in Colour
-</label>
     <button class="btn" id="printBtn">🖨 Print</button>
     <button class="btn" id="pdfBtn">💾 Save PDF</button>
   </div>
@@ -345,39 +306,34 @@ bodyEl.addEventListener('click',(e)=>{
 });
 
 // ------------------- PRINT / PDF -------------------
-// Handle colour / black & white printing
-document.getElementById('printBtn').addEventListener('click', async () => {
+document.getElementById('pdfBtn').addEventListener('click',()=>{
   calculate();
-
-  // Default to Black & White unless checkbox is checked
-  if (!document.getElementById('colorPrint').checked) {
-    document.body.classList.add('bwPrint');
-  } else {
-    document.body.classList.remove('bwPrint');
-  }
-
-  const invoice = document.getElementById('invoiceRoot');
+  const invoice=document.getElementById('invoiceRoot');
   invoice.classList.add("pdf-mode");
-
-  const firstName = document.getElementById('custName').value.split(' ')[0] || 'Customer';
-  const opt = {
-    margin: 0,
-    filename: `PJ-${firstName}-${invNo.value}.pdf`,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true },
-    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  const firstName=document.getElementById('custName').value.split(' ')[0] || 'Customer';
+  const opt={
+    margin:0,
+    filename:`PJ-${firstName}-${invNo.value}.pdf`,
+    image:{type:'jpeg',quality:0.98},
+    html2canvas:{scale:2,useCORS:true},
+    jsPDF:{unit:'mm',format:'a4',orientation:'portrait'}
   };
-
-  // Save PDF
-  await html2pdf().set(opt).from(invoice).save();
-  invoice.classList.remove("pdf-mode");
-
-  // Print
-  setTimeout(() => {
-    window.print();
-  }, 500);
+  html2pdf().set(opt).from(invoice).save().then(()=>{ invoice.classList.remove("pdf-mode"); });
 });
 
+document.getElementById('printBtn').addEventListener('click',()=>{
+  calculate();
+  const invoice=document.getElementById('invoiceRoot');
+  window.print();
+  invoice.classList.add("pdf-mode");
+  const firstName=document.getElementById('custName').value.split(' ')[0] || 'Customer';
+  const opt={ margin:0, filename:`PJ-${firstName}-${invNo.value}.pdf`, image:{type:'jpeg',quality:0.98}, html2canvas:{scale:2,useCORS:true}, jsPDF:{unit:'mm',format:'a4',orientation:'portrait'} };
+  html2pdf().set(opt).from(invoice).save().then(()=>{ invoice.classList.remove("pdf-mode"); });
+});
 </script>
 </body>
 </html>
+
+
+
+
