@@ -326,7 +326,7 @@ calculate();
 // ------------------- ADD/DELETE ROW -------------------
 addBtn.addEventListener('click',()=>{
   const newRow=bodyEl.rows[0].cloneNode(true);
-  newRow.querySelectorAll('input').forEach(el=>el.value=el.type=="number"?"0":"");
+  newRow.querySelectorAll('input').forEach(el=>el.value=el.type=="number"?"":"");
   newRow.querySelectorAll('select').forEach(el=>el.selectedIndex=0);
   newRow.querySelector('.amount').textContent="0.00";
   bodyEl.appendChild(newRow); renumber(); calculate();
@@ -407,6 +407,7 @@ document.getElementById('printBtn').addEventListener('click',()=>{
 </script>
 </body>
 </html>
+
 
 
 
