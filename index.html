@@ -59,8 +59,21 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
 .totals .line{display:flex;justify-content:flex-end;gap:16px;margin:6px 0;}
 .totals .label{min-width:260px;text-align:right;color:#333;}
 .totals .value{min-width:150px;text-align:right;font-weight:600;}
-.terms,.sign{padding:0 16px 16px;}
-.terms{color:#444;border-top:1px dashed var(--edge);padding-top:12px;}
+/*.terms,.sign{padding:0 16px 16px;}
+.terms{color:#444;border-top:1px dashed var(--edge);padding-top:12px;}*/
+.terms {
+  font-size: 12px;   /* makes text smaller */
+  line-height: 1.4;  /* improves readability */
+  color: #333;       /* optional: softer text */
+  margin-top: 10px;  /* space above it */
+}
+
+.terms strong {
+  font-size: 13px;   /* smaller heading */
+  display: block;    /* puts it on its own line */
+  margin-bottom: 4px;
+}
+.sign{padding:0 16px 16px;}
 .sign{display:flex;justify-content:space-between;margin-top:18px;}
 .printText{display:none;}
 @media print{
@@ -97,7 +110,11 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
   <div class="header">
     <img src="logo.png" alt="Prem Jewellers Logo" class="logo"/>
     <div style="flex:1;text-align:center;">
-      <h1>Prem ज्वेलर्स </h1>
+   <!---  <h1>Prem ज्वेलर्स </h1> -->
+   <h1>
+  <img src="pj-title.png" alt="Prem Jewellers " style="height:60px; width:auto;">
+</h1>
+  
       <div class="sub">Hirapur, Hatia, Dhanbad • Deals in Gold, Silver ornaments, Diamond, Gems & Steel, Brass Bartan</div>
       <div class="sub">GSTIN: 20ATAPK0131FZQ</div>
       <div class="badge">Retail Invoice</div>
@@ -188,7 +205,7 @@ table td, table th{vertical-align:middle;text-align:center;padding:6px;white-spa
   </div>
   <div class="terms">
     <strong>Terms & Conditions:</strong>
-    <p>1. Goods once sold will not be taken back 2. Our responsibility ceases after delivery/dispatch 3. Exchange within 15 days only if unused 4. Disputes subject to Dhanbad Jurisdiction 5. Gold: 100% return by weight, Cash Refund 90% 6. Silver: 50% return only by exchange 7. Nose Ring & Pin exchange 60%</p>
+    <p>1. Goods once sold will not be taken back 2. Our responsibility ceases after delivery/dispatch 3. Exchange within 7 days only if unused 4. Disputes subject to Dhanbad Jurisdiction 5. Gold: 100% return by weight, Cash Refund 90% 6. Silver: 50% return only by exchange 7. Nose Ring & Pin exchange 60%</p>
   </div>
   <div class="sign">
     <div>Customer Signature ___________________________</div>
@@ -384,12 +401,14 @@ document.getElementById('printBtn').addEventListener('click',()=>{
       localStorage.setItem(STORAGE_KEY, lastNo);
     }
   });
-})(); **/
+})();**/
 
 
 </script>
 </body>
 </html>
+
+
 
 
 
