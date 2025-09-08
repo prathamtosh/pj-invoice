@@ -346,23 +346,36 @@ bodyEl.addEventListener('click',(e)=>{
 
 // ------------------- PRINT / PDF -------------------
 // Handle colour / black & white printing
-document.getElementById('printBtn').addEventListener('click', ()=>{
-  if(!document.getElementById('colorPrint').checked){
+document.getElementById('printBtn').addEventListener('click', async () => {
+  calculate();
+
+  // Default to Black & White unless checkbox is checked
+  if (!document.getElementById('colorPrint').checked) {
     document.body.classList.add('bwPrint');
   } else {
     document.body.classList.remove('bwPrint');
   }
-}, true); // run before main print logic
 
-
-document.getElementById('printBtn').addEventListener('click',()=>{
-  calculate();
-  const invoice=document.getElementById('invoiceRoot');
-  window.print();
+  const invoice = document.getElementById('invoiceRoot');
   invoice.classList.add("pdf-mode");
-  const firstName=document.getElementById('custName').value.split(' ')[0] || 'Customer';
-  const opt={ margin:0, filename:`PJ-${firstName}-${invNo.value}.pdf`, image:{type:'jpeg',quality:0.98}, html2canvas:{scale:2,useCORS:true}, jsPDF:{unit:'mm',format:'a4',orientation:'portrait'} };
-  html2pdf().set(opt).from(invoice).save().then(()=>{ invoice.classList.remove("pdf-mode"); });
+
+  const firstName = document.getElementById('custName').value.split(' ')[0] || 'Customer';
+  const opt = {
+    margin: 0,
+    filename: `PJ-${firstName}-${invNo.value}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  };
+
+  // Save PDF
+  await html2pdf().set(opt).from(invoice).save();
+  invoice.classList.remove("pdf-mode");
+
+  // Print
+  setTimeout(() => {
+    window.print();
+  }, 500);
 });
 
 </script>
